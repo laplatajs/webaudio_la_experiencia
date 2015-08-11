@@ -1,0 +1,35 @@
+#! /bin/bash
+
+#!/bin/bash
+
+sha=0
+previous_sha=0
+
+update_sha ()
+{
+    sha=`ls -lR . | sha1sum`
+}
+
+serve () {
+    [[ -z "$pid" ]] || kill -9 $pid
+    sleep 1
+    ruby -run -e httpd -- -p 5000 . & # Si, ruby gordeetos...
+    pid=$!
+}
+
+changed () {
+    serve
+    previous_sha=$sha
+}
+
+compare () {
+    update_sha
+    if [[ $sha != $previous_sha ]] ; then changed; fi
+}
+
+echo "Serving files in . at http://localhost:5000"
+
+while true; do
+    compare
+done
+

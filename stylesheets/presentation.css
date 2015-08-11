@@ -1,0 +1,23 @@
+body {
+    background-color: #111;
+}
+
+h1 {
+    color: white;
+    font-size: 3em;
+}
+
+.container {
+    width: 80%;
+    height: 80%;
+    margin: 40px auto;
+    text-align: center;
+
+    background-image: radial-gradient(ellipse, #111 10%, rgba(30, 30, 30, 0.4) 30%, #333 60%);
+}
+
+h1.cover-title {
+    margin-left: 60%;
+    margin-right: 50%;
+    padding-top: 20px;
+}
