@@ -1,5 +1,8 @@
 body {
     background-color: #111;
+    background-image: url('img/fondo.jpg');
+    background-repeat: no-repeat;
+    background-position: bottom;
 }
 
 h1 {
@@ -13,11 +16,11 @@ h1 {
     margin: 40px auto;
     text-align: center;
 
-    background-image: radial-gradient(ellipse, #111 10%, rgba(30, 30, 30, 0.4) 30%, #333 60%);
+#    background-image: radial-gradient(ellipse, #111 10%, rgba(30, 30, 30, 0.4) 30%, #333 60%);
 }
 
 h1.cover-title {
-    margin-left: 60%;
+    margin-left: 70%;
     margin-right: 50%;
-    padding-top: 20px;
+    padding-top: 200px;
 }
