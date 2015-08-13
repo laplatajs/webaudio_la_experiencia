@@ -1,0 +1,190 @@
+<html>
+  <head>
+    <style>
+     @font-face {
+       font-family: 'Orbitron';
+       font-style: normal;
+       font-weight: 100;
+       src: url(orbitron.woff2) format('woff2');
+       unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+     }
+     
+     body { font-family: "Orbitron" }
+     
+     input[type='range'] {
+       width: 20px;
+       height: 200px;
+       -webkit-appearance: slider-vertical;
+       writing-mode: bt-lr;
+       padding: 40px;
+     }
+
+     input[type='text'] {
+       width: 40px;
+     }
+
+     #fx {
+       margin: 0 auto;
+       text-align: center;
+     }
+     
+     div.control {
+       color: #eee;
+       text-align: center;
+       display: inline-block;
+     }
+
+     div.control .value {
+       padding: 10px;
+     }
+
+     div.control .label {
+       padding: 10px;
+     }
+    </style>
+  </head>
+  <body style="background-color: black;">
+    
+    <canvas id="canvas" ></canvas>
+    <div id="fx">      
+      <div class="control">
+        <div class="label">Freq</div>
+        <input id="freq" type="range" min="20.0" max="5000.0" step="1">
+        <div class="value"> <input id="freq_v" type="text"> </div>
+      </div>
+
+      <div class="control">
+        <div class="label">Q</div>
+        <input id="Q" type="range" min="0.0" max="15.0" step="0.1">
+        <div class="value">         <input id="Q_v" type="text"></div>
+      </div>
+
+      <div class="control">
+        <div class="label">LFO</div>      
+        <input id="lfo" type="range" min="0.0" max="100.0" step="0.01">
+        <div class="value"> <input id="lfo_v" type="text"> </div>
+      </div>
+
+      <div class="control">
+        <div class="label">LFO depth</div>      
+        <input id="depth" type="range" min="0.0" max="500.0" step="1">
+        <div class="value"> <input id="depth" type="text"> </div>
+      </div>
+      <div class="control">
+        <div class="label">Delay</div>      
+        <input id="delay" type="range" min="0.0" max="5" step="0.001">
+        <div class="value"> <input id="delay_v" type="text"> </div>
+      </div>
+      <div class="control">
+        <div class="label">Feedback</div>      
+        <input id="feedback" type="range" min="0.0" max="1.0" step="0.01">
+        <div class="value"> <input id="feedback_v" type="text"> </div>
+      </div>
+      <div class="control">
+        <div class="label">Volume</div>      
+        <input id="volume" type="range" min="0.0" max="1.0" step="0.01">
+        <div class="value">  <input id="volume_v" type="text">  </div>
+      </div>
+      
+      
+    </div>
+    <script>
+     'use strict'
+     window.AudioContext = window.AudioContext || window.webkitAudioContext;
+     navigator.getMedia = ( navigator.getUserMedia ||
+                            navigator.webkitGetUserMedia ||
+                            navigator.mozGetUserMedia ||
+                            navigator.msGetUserMedia);
+
+     var canvas = document.querySelector('canvas');
+     canvas.height = 360;
+     canvas.width = window.innerWidth;
+     
+     var Lab = function() {
+       var Visualizer = function (context, source, canvas) {
+         /*
+          * Copyright 2013 Boris Smus. All Rights Reserved.
+
+          * Licensed under the Apache License, Version 2.0 (the "License");
+          * you may not use this file except in compliance with the License.
+          * You may obtain a copy of the License at
+          *
+          *     http://www.apache.org/licenses/LICENSE-2.0
+          *
+          * Unless required by applicable law or agreed to in writing, software
+          * distributed under the License is distributed on an "AS IS" BASIS,
+          * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+          * See the License for the specific language governing permissions and
+          * limitations under the License.
+          */
+
+         var WIDTH = canvas.width;
+         var HEIGHT = canvas.height;
+
+         var analyser = context.createAnalyser();         
+         analyser.minDecibels = -140;
+         analyser.maxDecibels = 0;
+         analyser.smoothingTimeConstant = 0.8;
+         analyser.fftSize = 2048;
+         source.connect(analyser);
+
+         var freqs = new Uint8Array( analyser.frequencyBinCount );
+         var times = new Uint8Array( analyser.frequencyBinCount );
+
+         var draw = function() {
+           requestAnimationFrame(draw);
+           
+           // Get the frequency data from the currently playing music
+           analyser.getByteFrequencyData( freqs );
+           analyser.getByteTimeDomainData( times );
+
+           var width = Math.floor(1 / freqs.length, 10);
+           var drawContext = canvas.getContext('2d');
+           drawContext.clearRect(0, 0, canvas.width, canvas.height);
+           
+           // Draw the frequency domain chart.
+           for (var i = 0; i < analyser.frequencyBinCount; i++) {
+             var value = freqs[i];
+             var percent = value / 256;
+             var height = HEIGHT * percent;
+             var offset = HEIGHT - height - 1;
+             var barWidth = WIDTH / analyser.frequencyBinCount;
+             var hue =  i % 360 ;//i / analyser.frequencyBinCount * 360;
+             
+             drawContext.fillStyle = 'hsl(' + hue + ', 100%, 50%)';
+             drawContext.fillRect(i * barWidth, offset, barWidth - 0.1, height);
+           }
+
+           // Draw the time domain chart.
+           for (var i = 0; i < analyser.frequencyBinCount; i++) {
+             var value = times[i];
+             var percent = value / 256;
+             var height = HEIGHT * percent;
+             var offset = HEIGHT - height - 1;
+             var barWidth = WIDTH / analyser.frequencyBinCount;
+             
+             drawContext.fillStyle = 'white';
+             //             drawContext.fillStyle = 'hsl(' + Math.random() *  360 + ', 100%, 50%)';
+             drawContext.fillRect(i * barWidth, offset, 2, 2);
+           }
+         }
+
+         var getFrequencyValue = function(freq) {
+           var nyquist = context.sampleRate/2;
+           var index = Math.round(freq/nyquist * freqs.length);
+           
+           return freqs[index];
+         }
+
+         draw();
+       };
+
+       var AC = new AudioContext();
+
+
+     };
+     
+     var lab = Lab();
+    </script>
+  </body>
+</html>

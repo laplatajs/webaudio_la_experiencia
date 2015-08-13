@@ -1,0 +1,63 @@
+<html>
+  <body>    
+    <script>
+     window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
+     var AC = new AudioContext();
+     var master = AC.createGain();
+     master.gain.value = 0.2;
+     
+     var o = AC.createOscillator();
+     o.type = 'triangle';
+     o.frequency.value = 500;
+     o.connect(master);
+     o.start();
+     master.connect(AC.destination);
+     master.gain.setValueAtTime(0.0, AC.currentTime);
+     master.gain.setValueAtTime(0.0, AC.currentTime);
+
+     function ads(param, when, attack, decay, sustain) {
+       param.cancelScheduledValues(when);
+       param.linearRampToValueAtTime(1.0, when + (attack / 1000) );
+       param.linearRampToValueAtTime(sustain, when + (attack + decay) / 1000); //decay: 50ms to 0.8
+     }
+
+     function r(param, when, release) {
+       param.cancelScheduledValues(when);
+       param.linearRampToValueAtTime(0.0, when +  release  / 1000); // release 1000 ms
+     }
+
+     document.addEventListener('keydown', function(e){
+       switch(e.keyCode){
+         case 65:
+           ads(master.gain, AC.currentTime, 2300, 100, 0.99);
+           break;
+         case 68:
+           ads(master.gain, AC.currentTime, 0, 10, 0.8);
+           break;
+         case 71:
+           ads(master.gain, AC.currentTime, 20, 10, 0.6);
+           break;
+           
+       }
+     });
+
+     document.addEventListener('keyup', function(e){
+       switch(e.keyCode) {
+         case 65:
+           r(master.gain, AC.currentTime, 300);
+           break;
+         case 68:
+           r(master.gain, AC.currentTime, 1000);
+           break;
+         case 71:
+           r(master.gain, AC.currentTime, 20);
+           break;
+           
+       }
+     });
+     
+    </script>
+  </body>
+</html>
+
