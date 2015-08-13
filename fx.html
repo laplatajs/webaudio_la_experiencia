@@ -100,6 +100,12 @@
      var canvas = document.querySelector('canvas');
      canvas.height = 360;
      canvas.width = window.innerWidth;
+
+     function setValue(control, value){
+         control.param.value = value;
+         control.value = value;
+         control.nextElementSibling.querySelector('input').value = value;
+       }
      
      var FX = function() {
        var Visualizer = function (context, source, canvas) {
@@ -270,12 +276,6 @@
            break;
          default:
            console.log('not found e...');
-       }
-
-       function setValue(control, value){
-         control.param.value = value;
-         control.value = value;
-         control.nextElementSibling.querySelector('input').value = value;
        }
        
        control.addEventListener('input', function(){

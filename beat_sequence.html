@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>drum sequencer</title>
+  <script src="js/WAAClock-latest.js"></script>
+  <script src="js/jquery-1.9.1.js"></script>
+  <script src="js/jquery-ui-1.10.3.js"></script>
+  <script src="js/common.js"></script>
+  <link href="css/jquery-ui.css" rel="stylesheet" type="text/css" />
+  <link href="css/rainbow.css" rel="stylesheet" type="text/css" />
+  <link href="css/styles.css" rel="stylesheet" type="text/css" />
+  <link href="css/beatSequence.css" rel="stylesheet" type="text/css" />
+  <script src="js/rainbow-custom.min.js"></script>
+</head>
+
+<body>
+  <h1><span id="signature"></span>/4, <span id="tempo"></span> BPM</h1>
+  <div class="note">
+    <b>note :</b> you can change the tempo and the signature. For example go to <a href="?tempo=300&signature=7">?tempo=300&signature=7</a> to have 7 beats played at tempo 300.
+  </div> 
+
+  <button id="startButton">Start</button>
+  <table id="pattern">
+    <tr data-track="hihat"></tr>
+    <tr data-track="snare"></tr>
+    <tr data-track="noise_snare"></tr>
+    <tr data-track="kick"></tr>
+  </table>
+
+  
+  <script>
+    // Function for moving the beat cursor
+    var beatCount = -1;
+
+    var uiNextBeat = function() {
+      beatCount = (beatCount + 1) % signature;
+      $('#pattern td').removeClass('active');
+      $('#pattern td:nth-child('+(beatCount+1)+')').addClass('active');
+    }
+  </script>
+
+  <script src="js/beatSequence.js"></script>
+
+  <script>
+    $('#signature').html(signature);
+    $('#tempo').html(tempo);
+
+    $('#startButton').click(function() {
+      $('#startButton').hide();
+
+      $('#pattern tr').each(function() {
+        var track = $(this)
+          , trackName = track.data('track');
+
+        loadTrack(trackName);
+        beats[trackName] = {};
+
+        for (var beatInd = 0; beatInd < signature; beatInd++) {
+          var td = $('<td class="'+beatInd+'"><div class="beat"></div></td>');
+          td.appendTo(track);
+
+          td.find('.beat').click(function(beatInd) {
+            return function() {
+              var beat = $(this);
+              if (!beat.hasClass('active')) {
+                beat.addClass('active');
+                startBeat(trackName, beatInd);
+              } else {
+                beat.removeClass('active');
+                stopBeat(trackName, beatInd);
+              }
+            }
+          }(beatInd));
+        }
+      })
+    })
+  </script>
+
+</body>
+
+</html>
