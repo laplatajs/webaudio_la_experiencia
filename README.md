@@ -1,10 +1,10 @@
-# Material utilizado en la meetup 13/08/2015 de @laplatajs
+# Material utilizado en la meetup 13/08/2015 de [@laplatajs](https://github.com/laplatajs)
 
 ## Tocado en vivo:
 
 ### Guitarra
 
-* [FX](https://github.com/webmedia-lab/the-webaudio-experience/blob/master/fx.html)
+* [efectos](https://github.com/webmedia-lab/the-webaudio-experience/blob/master/fx.html)
 
 ### Bateria
 
