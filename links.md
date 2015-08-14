@@ -25,3 +25,8 @@
 **Grupos**
 
 * [Web Audio Developers Community Group](https://www.w3.org/community/audio-dev/)
+
+
+**Weeklies**
+
+* [Web Audio Weekly](http://blog.chrislowis.co.uk/waw.html)
