@@ -12,9 +12,9 @@
 
 #### Bajo
 
-* [MIDI](https://github.com/webmedia-lab/the-webaudio-experience/blob/master/midi.html)
+* [MIDI](http://laplatajs.github.io/webaudio_la_experiencia/midi.html)
 
 
 ### Links
 
-#### [links](http://laplatajs.github.io/webaudio_la_experiencia/midi.html)
+#### [links](https://github.com/webmedia-lab/the-webaudio-experience/blob/master/links.md)
