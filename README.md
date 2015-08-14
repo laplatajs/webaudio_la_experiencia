@@ -4,11 +4,11 @@
 
 #### Guitarra
 
-* [efectos](https://github.com/webmedia-lab/the-webaudio-experience/blob/master/fx.html)
+* [efectos](http://laplatajs.github.io/webaudio_la_experiencia/fx.html)
 
 #### Bateria
 
-* [drum sequencer](https://github.com/webmedia-lab/the-webaudio-experience/blob/master/beat_sequence.html)
+* [drum sequencer](http://laplatajs.github.io/webaudio_la_experiencia/beat_sequence.html)
 
 #### Bajo
 
@@ -17,4 +17,4 @@
 
 ### Links
 
-#### [links](https://github.com/webmedia-lab/the-webaudio-experience/blob/master/links.md)
+#### [links](http://laplatajs.github.io/webaudio_la_experiencia/midi.html)
